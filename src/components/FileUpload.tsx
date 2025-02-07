@@ -55,17 +55,12 @@ const FileUpload = (props: Props) => {
           toast.error("something went wrong");
           return;
         }
-        // mutate(data, {
-        //   onSuccess: ({ chat_id }) => {
-        //     toast.success("Chat created!");
-        //     router.push(`/chat/${chat_id}`);
-        //   },
-
         mutate(data, {
-          onSuccess: (data) => {
-            // toast.success(data.message);
-            console.log(data);
+          onSuccess: ({ chat_id }) => {
+            toast.success("Chat created!");
+            router.push(`/chat/${chat_id}`);
           },
+
           onError: (err) => {
             toast.error("Error creating chat");
             console.error(err);
