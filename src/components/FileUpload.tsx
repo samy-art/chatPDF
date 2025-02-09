@@ -8,11 +8,9 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 
-type Props = {};
-
-const FileUpload = (props: Props) => {
+const FileUpload = () => {
   const router = useRouter();
-  const [uploading, setUploading] = useState(false);
+  const [uploading, setUploading] = React.useState(false);
 
   const { mutate, isPending } = useMutation({
     mutationFn: async ({

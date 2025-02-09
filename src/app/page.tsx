@@ -58,10 +58,20 @@ import { auth } from "@clerk/nextjs/server";
 import Link from "next/link";
 import { LogIn } from "lucide-react";
 import FileUpload from "@/components/FileUpload";
+import { chats } from "@/lib/db/schema";
+import { eq } from "drizzle-orm";
+import { db } from "@/lib/db";
 
 export default async function ChatPage() {
   const { userId } = await auth();
   const isAuth = !!userId;
+  let firstChat;
+  if (userId) {
+    firstChat = await db.select().from(chats).where(eq(chats.userId, userId));
+    if (firstChat) {
+      firstChat = firstChat[0];
+    }
+  }
 
   return (
     <div className="relative w-screen min-h-screen">
@@ -100,10 +110,10 @@ export default async function ChatPage() {
             ) : (
               <Link href="/sign-in">
                 <center>
-                <Button className="flex items-center px-6 py-4 text-lg shadow-md">
-                  Login to get Started!
-                  <LogIn className="w-5 h-5 ml-4" />
-                </Button>
+                  <Button className="flex items-center px-6 py-4 text-lg shadow-md">
+                    Login to get Started!
+                    <LogIn className="w-5 h-5 ml-4" />
+                  </Button>
                 </center>
               </Link>
             )}
