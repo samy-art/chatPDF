@@ -71,7 +71,7 @@ body {
 
   /* Default Light Mode Background */
   body {
-    @apply h-screen w-screen bg-background text-foreground bg-[url('')] bg-cover bg-center bg-no-repeat;
+    @apply h-screen w-screen bg-background text-foreground bg-cover bg-center bg-no-repeat;
   }
 
   /* Dark Mode Background */

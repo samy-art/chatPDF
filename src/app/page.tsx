@@ -76,7 +76,7 @@ export default async function ChatPage() {
   return (
     <div className="relative w-screen min-h-screen">
       {/* Background Image */}
-      <div className="absolute inset-0 bg-[url('/images/bg.jpg')] bg-cover bg-center bg-no-repeat"></div>
+      <div className="absolute inset-0 bg-[url('https://thumbs.dreamstime.com/b/ai-chatbot-concept-glowing-digital-humanoid-robot-figure-dark-blue-background-artificial-intelligence-virtual-assistant-354640613.jpg')] bg-cover bg-center bg-no-repeat"></div>
 
       {/* Gradient Overlay */}
       <div className="absolute inset-0 bg-gradient-to-r from-pink-300 to-blue-100 opacity-80"></div>
