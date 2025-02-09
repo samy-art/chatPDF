@@ -1,57 +1,152 @@
-import { UserButton } from "@clerk/nextjs";
-import { Button } from "@/components/ui/button";
-import { auth } from "@clerk/nextjs/server";
-import Link from "next/link";
-import { LogIn } from "lucide-react";
-import Image from "next/image";
+import React, { useState, useEffect } from 'react';
+import { register } from '../../helpers/auth/auth.helper.js';
+import { useNavigate, Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { useSupplier } from '../../context/supplierContext.jsx';
 
-export default async function Home() {
-  const { userId } = await auth();
-  const isAuth = !!userId;
+const Register = () => {
+  const navigate = useNavigate();
+  const { auth, loading, setLoading, darkMode } = useSupplier();
+
+  const [userCreds, setUser] = useState({
+    username: '',
+    email: '',
+    password: '',
+    phone: ''
+  });
+
+  useEffect(() => {
+    if (auth) {
+      navigate('/home');
+    }
+  }, [auth, navigate]);
+
+  const handleChange = (e) => {
+    setUser((prevUser) => ({
+      ...prevUser,
+      [e.target.id]: e.target.value,
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (userCreds.username.length < 3) {
+      toast.warning('Username must be at least 3 characters long');
+      return;
+    } else if (userCreds.password.length < 6) {
+      toast.warning('Password must be at least 6 characters long');
+      return;
+    } else if (userCreds.username.length > 10) {
+      toast.warning('Username must be less than 10 characters long');
+      return;
+    }
+
+    setLoading(true);
+    const result = await register(userCreds).finally(() => setLoading(false));
+    if (result.status === 201) {
+      toast.success(result.message);
+      navigate('/');
+    } else if (result.status === 400) {
+      toast.warning(result.message);
+    } else {
+      toast.error(result.message);
+    }
+  };
 
   return (
-    <div className="w-screen min-h-screen bg-gradient-to-r from-pink-300 to-blue-100">
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-        <div className="flex flex-col items-center text-center">
-          <div className="flex items-center">
-            <h1 className="mr-3 text-5xl font-semibold">Chat with any PDF</h1>
-            {/* UserButton handles sign-out */}
-            <UserButton />
-          </div>
-          <div className="flex mt-2">
-            {isAuth && <Button>Go to Chats</Button>}
-          </div>
-          <div className="mt-4">
-            <p className="max-w-xl mt-2 text-lg text-darkgrey-600">
-              Join millions of students, researchers, and professionals to
-              instantly answer questions and understand research with AI.
-            </p>
-
-            <div className="w-full mt-4">
-              {isAuth ? (
-                <h1>fileupload</h1>
-              ) : (
-                <Link href="/sign-in">
-                  <Button>
-                    Login to get Started!
-                    <LogIn className="w-4 h-4 ml-2" />
-                  </Button>
-                </Link>
-              )}
-            </div>
-
-            <div className="mt-6">
-              <Image
-                src="/image2.jpg" // Specify the path to your image
-                alt="Descriptive Text"
-                width={500} // You can adjust the width
-                height={300} // You can adjust the height
-                className="rounded-lg" // Optional: add rounded corners for the image
+    <div style={{ position: "relative", minHeight: "500vh" }}>
+      {/* Full rendered background image */}
+      <img 
+        src="https://img.freepik.com/free-photo/fitness-concept-with-dumbbells-frame_23-2148531434.jpg"  // Update the path as needed
+        alt="Background" 
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          objectFit: "contain", // Ensures the entire image is rendered without cropping
+          zIndex: -1,
+        }}
+      />
+      {/* Registration Form Container */}
+      <div
+        className={`container my-5 d-flex justify-content-center align-items-center`}
+        style={{ minHeight: "80vh" }}
+      >
+        <div
+          className="col-md-8 col-lg-6 col-xl-5 p-5 shadow rounded"
+          style={{
+            backgroundColor: darkMode ? 'rgba(0,0,0,0.7)' : 'rgba(255,255,255,0.9)',
+          }}
+        >
+          <h1 className={`display-4 mb-4 text-center ${darkMode ? 'text-light' : 'text-dark'}`}>
+            Register
+          </h1>
+          <form onSubmit={handleSubmit} className="w-100">
+            <div className="form-group mb-3">
+              <label htmlFor="username" className={darkMode ? 'text-light' : 'text-dark'}>
+                Username
+              </label>
+              <input
+                type="text"
+                className="form-control"
+                id="username"
+                value={userCreds.username}
+                onChange={handleChange}
+                placeholder="Enter your username"
+                required
               />
             </div>
-          </div>
+            <div className="form-group mb-3">
+              <label htmlFor="email" className={darkMode ? 'text-light' : 'text-dark'}>
+                Email
+              </label>
+              <input
+                type="email"
+                className="form-control"
+                id="email"
+                value={userCreds.email}
+                onChange={handleChange}
+                placeholder="Enter your email"
+                required
+              />
+            </div>
+            <div className="form-group mb-3">
+              <label htmlFor="password" className={darkMode ? 'text-light' : 'text-dark'}>
+                Password
+              </label>
+              <input
+                type="password"
+                className="form-control"
+                id="password"
+                value={userCreds.password}
+                onChange={handleChange}
+                placeholder="Enter your password"
+                required
+              />
+            </div>
+            <div className="d-grid gap-2 my-3">
+              <button
+                type="submit"
+                disabled={loading}
+                className={`btn btn-${darkMode ? 'light' : 'primary'}`}
+              >
+                {loading ? 'Registering...' : 'Register'}
+              </button>
+            </div>
+          </form>
+          <hr className={`my-4 ${darkMode ? 'border-light' : 'border-dark'}`} />
+          <p className={`text-center ${darkMode ? 'text-light' : 'text-dark'}`}>
+            Already have an account?{' '}
+            <Link to="/" className={darkMode ? 'text-light' : 'text-primary'}>
+              Login here
+            </Link>
+          </p>
         </div>
       </div>
     </div>
   );
-}
+};
+
+export default Register;

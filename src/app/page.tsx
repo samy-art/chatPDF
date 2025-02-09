@@ -64,34 +64,49 @@ export default async function ChatPage() {
   const isAuth = !!userId;
 
   return (
-    <div className="w-screen min-h-screen bg-gradient-to-r from-pink-300 to-blue-100">
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-        <div className="flex flex-col items-center text-center">
-          <div className="flex items-center">
-            <h1 className="mr-3 text-5xl font-semibold">Chat with any PDF</h1>
+    <div className="relative w-screen min-h-screen">
+      {/* Background Image */}
+      <div className="absolute inset-0 bg-[url('/images/bg.jpg')] bg-cover bg-center bg-no-repeat"></div>
+
+      {/* Gradient Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-r from-pink-300 to-blue-100 opacity-80"></div>
+
+      {/* Content */}
+      <div className="relative flex flex-col items-center justify-center min-h-screen text-center px-4">
+        <div className="flex flex-col items-center space-y-4">
+          <div className="flex items-center space-x-4">
+            <h1 className="text-4xl sm:text-5xl font-bold text-black drop-shadow-lg">
+              Chat with any PDF
+            </h1>
             <UserButton />
           </div>
-          <div className="flex mt-2">
-            {isAuth && <Button>Go to Chats</Button>}
-          </div>
-          <div className="mt-4">
-            <p className="max-w-xl mt-2 text-lg text-darkgrey-600">
-              Join millions of students, researchers, and professionals to
-              instantly answer questions and understand research with AI.
-            </p>
 
-            <div className="w-full mt-4">
-              {isAuth ? (
-                <FileUpload />
-              ) : (
-                <Link href="/sign-in">
-                  <Button>
-                    Login to get Started!
-                    <LogIn className="w-4 h-4 ml-2" />
-                  </Button>
-                </Link>
-              )}
-            </div>
+          {/* Conditional Buttons */}
+          {isAuth && (
+            <Button className="mt-2 px-6 py-3 text-lg shadow-md">
+              Go to Chats
+            </Button>
+          )}
+
+          <p className="max-w-xl text-lg text-white drop-shadow-lg mt-4">
+            Join millions of students, researchers, and professionals to
+            instantly answer questions and understand research with AI.
+          </p>
+
+          {/* File Upload or Login Button */}
+          <div className="w-full mt-4">
+            {isAuth ? (
+              <FileUpload />
+            ) : (
+              <Link href="/sign-in">
+                <center>
+                <Button className="flex items-center px-6 py-4 text-lg shadow-md">
+                  Login to get Started!
+                  <LogIn className="w-5 h-5 ml-4" />
+                </Button>
+                </center>
+              </Link>
+            )}
           </div>
         </div>
       </div>

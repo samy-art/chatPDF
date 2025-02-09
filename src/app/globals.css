@@ -4,6 +4,7 @@
 
 body {
   font-family: Arial, Helvetica, sans-serif;
+  @apply h-screen w-screen;
 }
 
 @layer base {
@@ -34,6 +35,7 @@ body {
     --chart-5: 27 87% 67%;
     --radius: 0.5rem;
   }
+  
   .dark {
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
@@ -66,7 +68,14 @@ body {
   * {
     @apply border-border;
   }
+
+  /* Default Light Mode Background */
   body {
-    @apply bg-background text-foreground;
+    @apply h-screen w-screen bg-background text-foreground bg-[url('https://thumbs.dreamstime.com/b/ai-chatbot-concept-glowing-digital-humanoid-robot-figure-dark-blue-background-artificial-intelligence-virtual-assistant-354640613.jpg')] bg-cover bg-center bg-no-repeat;
+  }
+
+  /* Dark Mode Background */
+  .dark body {
+    @apply bg-[url('/images/dark-bg.jpg')];
   }
 }
