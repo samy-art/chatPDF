@@ -15,8 +15,17 @@ const FileUpload = (props: Props) => {
   const [uploading, setUploading] = useState(false);
 
   const { mutate, isPending } = useMutation({
-    mutationFn: async ({ file_key, file_name }: { file_key: string; file_name: string }) => {
-      const response = await axios.post("/api/create-chat", { file_key, file_name });
+    mutationFn: async ({
+      file_key,
+      file_name,
+    }: {
+      file_key: string;
+      file_name: string;
+    }) => {
+      const response = await axios.post("/api/create-chat", {
+        file_key,
+        file_name,
+      });
       return response.data;
     },
   });
@@ -57,29 +66,27 @@ const FileUpload = (props: Props) => {
   });
 
   return (
-    
-      <div className=" mt-1 text-center max-w-lg px-2 py-1  bg-white rounded-2xl shadow-lg">
-        <div
-          {...getRootProps({
-            className:
-              " border-dashed border-2  border-gray-400 rounded-2xl cursor-pointer bg-gray-50 py-8 flex justify-center items-center flex-col text-gray-600",
-          })}
-        >
-          <input {...getInputProps()} />
-          {uploading || isPending ? (
-            <>
-              <Loader2 className="h-2 w-10 text-blue-600 animate-spin" />
-              <p className="mt-4 text-sm">Uploading...</p>
-            </>
-          ) : (
-            <>
-              <Inbox className="w-12 h-10 text-blue-900" />
-              <p className="mt-4 text-sm">Drop PDF Here</p>
-            </>
-          )}
-        </div>
+    <div className="p-2 bg-white rounded-xl">
+      <div
+        {...getRootProps({
+          className:
+            "border-dashed border-2 rounded-xl cursor-pointer bg-gray-50 py-8 flex justify-center items-center flex-col",
+        })}
+      >
+        <input {...getInputProps()} />
+        {uploading || isPending ? (
+          <>
+            <Loader2 className="h-10 w-10 text-blue-500 animate-spin" />
+            <p className="mt-2 text-sm text-slate-400">Uploading...</p>
+          </>
+        ) : (
+          <>
+            <Inbox className="w-10 h-10 text-blue-500" />
+            <p className="mt-2 text-sm text-slate-400">Drop PDF Here</p>
+          </>
+        )}
       </div>
-
+    </div>
   );
 };
 
